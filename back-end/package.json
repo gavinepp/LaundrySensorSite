@@ -1,0 +1,14 @@
+{
+  "name": "laundry-server",
+  "version": "1.0.0",
+  "description": "Gavin's server for his Honors Capstone project, the Laundry Sensor Site",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
