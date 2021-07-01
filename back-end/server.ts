@@ -1,6 +1,5 @@
 import {Request, Response} from 'express';
 import { QueryError, RowDataPacket, FieldPacket } from 'mysql2';
-import { stringify } from 'qs';
 
 const express = require('express');
 const http = require('http');
@@ -17,12 +16,14 @@ const dbConfig = {
 }
 
 // Go back (..) twice because the server is run through server.js in the /build directory
+// Host the Angular frontend statically on the home directory
 app.use('/', express.static(path.join(__dirname, '..', '..', 'front-end', 'dist', 'LaundrySensorSite')));
 
 app.get('/api', (req: Request, res: Response) => {
-    queryServer(1).then((sensor) => {
-        res.status(200).send({message: `Hi ${sensor}`});
-    });
+    queryServer(1)
+        .then((sensor) => {
+            res.status(200).send({message: `Hi ${sensor}`});
+        });
 });
 
 // TODO: add connection pooling for higher efficiency
@@ -30,6 +31,7 @@ app.get('/api', (req: Request, res: Response) => {
 // TODO: Decide how to best open/close connection
 async function queryServer(id: number): Promise<string> {
     const query='SELECT (sensor_name) FROM laundrydb.sensors WHERE (sensor_id)=?;'
+    let sensorName = 'Unknown';
     
     // Create the connection
     const conn = await mysql.createConnection(dbConfig);
@@ -40,11 +42,16 @@ async function queryServer(id: number): Promise<string> {
         console.log("Connected to LaundryDB!");
     });
 
-    // Using query in form of: query(sqlString, values, callback) to prevent injection attacks
+    // Using query in form of: execute(sqlString, values) to prevent injection attacks
     //  internally, it runs connection.escape() and replaces all ?'s with appropriate values
-    const [rows, fields] = await conn.execute(query, [id]);
+    try {
+        const [rows, fields]: [RowDataPacket[], FieldPacket] = await conn.execute(query, [id]);
+        sensorName = rows[0]['sensor_name'];
+    } catch (error) {
+        console.log("Query Error: ", error);
+    }
 
-    const sensorName = rows[0]['sensor_name'];
+    
 
     await conn.end((err: Error) => {
         if (err) return console.log('Error: ' + err.message);
