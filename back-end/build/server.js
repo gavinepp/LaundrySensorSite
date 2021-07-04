@@ -12,17 +12,20 @@ const dbConfig = {
     password: 'admin'
 };
 // Go back (..) twice because the server is run through server.js in the /build directory
+// Host the Angular frontend statically on the home directory
 app.use('/', express.static(path.join(__dirname, '..', '..', 'front-end', 'dist', 'LaundrySensorSite')));
 app.get('/api', (req, res) => {
-    queryServer(1).then((sensor) => {
+    queryServer(1)
+        .then((sensor) => {
         res.status(200).send({ message: `Hi ${sensor}` });
     });
 });
 // TODO: add connection pooling for higher efficiency
 // TODO: SSL implementation to allow for HTTPS certification
-// TODO: Properly close connection
+// TODO: Decide how to best open/close connection
 async function queryServer(id) {
     const query = 'SELECT (sensor_name) FROM laundrydb.sensors WHERE (sensor_id)=?;';
+    let sensorName = 'Unknown';
     // Create the connection
     const conn = await mysql.createConnection(dbConfig);
     // Essentially just passes any errors that might have occurred when creating the connection above
@@ -31,10 +34,15 @@ async function queryServer(id) {
             throw err;
         console.log("Connected to LaundryDB!");
     });
-    // Using query in form of: query(sqlString, values, callback) to prevent injection attacks
+    // Using query in form of: execute(sqlString, values) to prevent injection attacks
     //  internally, it runs connection.escape() and replaces all ?'s with appropriate values
-    const [rows, fields] = await conn.execute(query, [id]);
-    const sensorName = rows[0]['sensor_name'];
+    try {
+        const [rows, fields] = await conn.execute(query, [id]);
+        sensorName = rows[0]['sensor_name'];
+    }
+    catch (error) {
+        console.log("Query Error: ", error);
+    }
     await conn.end((err) => {
         if (err)
             return console.log('Error: ' + err.message);
