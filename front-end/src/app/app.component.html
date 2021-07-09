@@ -1,7 +1,21 @@
+<link href="https://fonts.googleapis.com/css?family=Material+Icons+Sharp" rel="stylesheet">
+<mat-toolbar class="navbar" color="primary">
+  <mat-toolbar-row class="navbar-row">
+    <div class="motif">
+      <mat-icon class="material-icons-sharp" aria-hidden="true">local_laundry_service_sharp</mat-icon>
+      <div>LaundryLooker</div>
+    </div>
 
-<mat-toolbar>
-  <span>{{title}}</span>
+    <div class="dorms">
+      <a mat-button [routerLink]="'/farris'"> Farris </a>
+    </div>
+
+    <div class="about">
+      <a mat-button [routerLink]="'/about'"> About </a>
+    </div>
+  </mat-toolbar-row>
 </mat-toolbar>
+
 <div>
   <h2>Presses: {{presses}}</h2>
   <h2>Message from server: {{message}}</h2>
