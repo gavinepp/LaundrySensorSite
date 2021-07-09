@@ -13,7 +13,7 @@ interface ServerMessage {
 })
 
 export class AppComponent {
-  title = 'LaundrySensorSite';
+  title = 'WasherWatcher';
   name = 'LSS';
   presses = 0;
   message = '';
