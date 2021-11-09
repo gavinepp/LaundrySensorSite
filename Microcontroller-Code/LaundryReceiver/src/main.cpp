@@ -11,6 +11,7 @@
 
 #include <esp_now.h>
 #include <WiFi.h>
+#include <ArduinoJson.h>
 #include "AsyncTCP.h"
 #include "ESPAsyncWebServer.h"
 #include "SPIFFS.h"
@@ -34,20 +35,24 @@ sensor_message receivedMessage;
 // callback function that will be executed when data is received
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   memcpy(&receivedMessage, incomingData, sizeof(receivedMessage));
+
   Serial.print("Sensor Name: ");
   Serial.println(receivedMessage.id);
-
   Serial.print("Machine On? : ");
   Serial.println(receivedMessage.machineOn);
-
   Serial.println();
+
+  DynamicJsonDocument board(1024);
+  board["id"] = receivedMessage.id;
+  board["status"] = receivedMessage.machineOn;
+  String jsonStr;
+  serializeJson(board, jsonStr);
+  events.send(jsonStr.c_str(), "machine_status", millis());
 }
 
 void initSPIFFS() {
-  if (!SPIFFS.begin()) {
-    Serial.println("An error has occurred while mounting SPIFFS");
-  }
-  Serial.println("SPIFFS mounted successfully");
+  if (!SPIFFS.begin()) {  Serial.println("An error has occurred while mounting SPIFFS"); }
+  else {  Serial.println("SPIFFS mounted successfully"); }
 }
 
 void initWiFi() {
@@ -55,11 +60,17 @@ void initWiFi() {
   WiFi.mode(WIFI_AP_STA);
   WiFi.begin(SSID, PASSWORD);
 
+
   Serial.print("Connecting to WiFi...");
   while (WiFi.status() != WL_CONNECTED) {
     Serial.print(".");
     delay(1000);
   }
+
+  Serial.print("\nStation IP Address: ");
+  Serial.println(WiFi.localIP());
+  Serial.print("Wi-Fi Channel: ");
+  Serial.println(WiFi.channel());
 }
 
 void setup() {
@@ -68,7 +79,7 @@ void setup() {
 
   initWiFi();
   initSPIFFS();
-
+  
   // Init ESP-NOW
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
@@ -88,7 +99,7 @@ void setup() {
    
   events.onConnect([](AsyncEventSourceClient *client){
     if(client->lastId()){
-      Serial.printf("Client reconnected! Last message ID that it got is: %u\n", client->lastId());
+      Serial.printf("Client reconnected! Last message ID received is: %u\n", client->lastId());
     }
     // send event with message "hello!", id current millis
     // and set reconnect delay to 1 second

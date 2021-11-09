@@ -1,14 +1,6 @@
-<!--
-  Rui Santos
-  Complete project details at https://RandomNerdTutorials.com/esp32-mpu-6050-web-server/
-
-  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files.
-  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
-
 <!DOCTYPE HTML><html>
 <head>
-  <title>ESP Web Server</title>
+  <title>The WasherWatcher</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:,">
   <link rel="stylesheet" type="text/css" href="style.css">
@@ -17,13 +9,58 @@
 </head>
 <body>
   <div class="topnav">
-    <h1><i class="far fa-compass"></i> MPU6050 <i class="far fa-compass"></i></h1>
+    <h1>The WasherWatcher</h1>
   </div>
   <div class="content">
+    <h2>Farris Hall Laundry Room</h2>
     <div class="machines">
-      <div class="FARRIS_WASHER_1">
-        <p class="machine-name">Farris Washer 1</p>
-        <p>Status: <span id="status"></span> </p>
+      <div id="FARRIS_WASHER_1" class="machine_unknown">
+        <span id="name">Farris Washer 1:</span>
+        <span id="status">Unknown</span>
+      </div>
+      <div id="FARRIS_WASHER_2" class="machine_unknown">
+        <span id="name">Farris Washer 2:</span>
+        <span id="status">Unknown</span>
+      </div>
+      <div id="FARRIS_WASHER_3" class="machine_unknown">
+        <span id="name">Farris Washer 3:</span>
+        <span id="status">Unknown</span>
+      </div>
+      <div id="FARRIS_DRYER_1" class="machine_unknown">
+        <span id="name">Farris Dryer 1:</span>
+        <span id="status">Unknown</span>
+      </div>
+      <div id="FARRIS_DRYER_2" class="machine_unknown">
+        <span id="name">Farris Dryer 2:</span>
+        <span id="status">Unknown</span>
+      </div>
+      <div id="FARRIS_DRYER_3" class="machine_unknown">
+        <span id="name">Farris Dryer 3:</span>
+        <span id="status">Unknown</span>
+      </div>
+      <div id="FARRIS_WASHER_4" class="machine_unknown">
+        <span id="name">Farris Washer 4:</span>
+        <span id="status">Unknown</span>
+      </div>
+      <div id="FARRIS_WASHER_5" class="machine_unknown">
+        <span id="name">Farris Washer 5:</span>
+        <span id="status">Unknown</span>
+      </div>
+      <div id="FARRIS_WASHER_6" class="machine_unknown">
+        <span id="name">Farris Washer 6:</span>
+        <span id="status">Unknown</span>
+      </div>
+      <div id="FARRIS_DRYER_4" class="machine_unknown">
+        <span id="name">Farris Dryer 4:</span>
+        <span id="status">Unknown</span>
+      </div>
+      <div id="FARRIS_DRYER_5" class="machine_unknown">
+        <span id="name">Farris Dryer 5:</span>
+        <span id="status">Unknown</span>
+      </div>
+      <div id="FARRIS_DRYER_6" class="machine_unknown">
+        <span id="name">Farris Dryer 6:</span>
+        <span id="status">Unknown</span>
       </div>
     </div>
   </div>
