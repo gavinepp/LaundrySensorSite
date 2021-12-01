@@ -17,8 +17,8 @@
 #include "ESPAsyncWebServer.h"
 #include "SPIFFS.h"
 
-const char* SSID = "UCAWIRELESS";
-const char* PASSWORD = "";
+const char* SSID = "UCAWIRELESS"; // String name of the WiFi network to connect to
+const char* PASSWORD = "";        // String password of the WiFi network (null for UCAWireless)
 
 AsyncWebServer server(80);
 AsyncEventSource events("/events");
@@ -66,8 +66,8 @@ bool initSPIFFS() {
 
 // Helper function to connect the microcontroller to the WiFi network. Will hang indefinitely until it connects.
 void initWiFi() {
-  // Set device as a Wi-Fi station (able to serve the website to all users connected to the WiFi network)
-  WiFi.mode(WIFI_STA);
+  // Set device as a Wi-Fi access point (allows controllers to connect)
+  WiFi.mode(WIFI_AP);
   WiFi.begin(SSID, PASSWORD);
 
 
