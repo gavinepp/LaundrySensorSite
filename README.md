@@ -1,4 +1,4 @@
-# LaundrySensorSite
+# The WasherWatcher
 Gavin Epperson's Fall 2021 Honors Capstone project. A simple locally-hosted proof of concept website to allow users to view the status of washers and dryers.
 
 ## Repo Structure
